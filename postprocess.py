@@ -12,6 +12,7 @@ name_fields = ['Last_name_ru', 'First_name_ru', 'Middle_name_ru']
 two_fields = ['Birth_place_ru', 'Issue_organization_ru']
 mrz_fields = ['Birth_date', 'Issue_date', 'Issue_organisation_code', 'Licence_number']
 min_conf = {'web': 0.95, 'mobile': 0.95, 'mobile_v2': 0.9995}
+protected = {'Р-НЕ', 'Р-НА', 'РЕСПУБЛИКЕ', 'ГОР.'}
 on_date = pd.Timestamp('2026-10-01')
 translit = {'А':'A','Б':'B','В':'V','Г':'G','Д':'D','Е':'E','Ё':'E','Ж':'J','З':'Z','И':'I',
     'Й':'Q','К':'K','Л':'L','М':'M','Н':'N','О':'O','П':'P','Р':'R','С':'S','Т':'T','У':'U','Ф':'F',
@@ -172,7 +173,7 @@ def fix_org(chars, known, known_by_len):
     words, pos = [], 0
     for w in text.split(' '):
         c = conf[pos:pos + len(w)]
-        if w in known:
+        if w in known or w in protected:
             cands = [w]
         else:
             cands = [v for v in known_by_len.get(len(w), []) if merge(w, c, v, [1.0] * len(v))]
